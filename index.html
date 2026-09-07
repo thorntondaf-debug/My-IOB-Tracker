@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>IOB Tracker v7.5 RC1</title>
+
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+
+<meta name="theme-color" content="#1565C0">
+
+</head>
+
+
+<body>
+
+<header class="header">
+
+    <h1>IOB Tracker</h1>
+
+</header>
+
+<main>
+
+    <!-- Dashboard -->
+
+    <section class="card">
+
+        <div id="optisulinReminder" class="reminder">
+
+            ⚠ No Optisulin logged today
+
+        </div>
+
+        <div class="label">
+
+            Active Insulin
+
+        </div>
+
+        <div id="iobValue" class="iob">
+
+            0.00 U
+
+        </div>
+
+        <div id="countdown" class="countdown">
+
+            No active insulin
+
+        </div>
+
+    </section>
+
+    <!-- Today's Summary -->
+
+    <section class="card">
+
+        <h2>Today's Summary</h2>
+
+        <div class="summaryRow">
+
+            <span>Rapid Total</span>
+
+            <span id="todayRapid">
+
+                0 U
+
+            </span>
+
+        </div>
+
+        <div class="summaryRow">
+
+            <span>Optisulin</span>
+
+            <span id="todayLong">
+
+                0 U
+
+            </span>
+
+        </div>
+
+        <div class="summaryRow">
+
+            <span>Last BG</span>
+
+            <span id="lastBG">
+
+                --
+
+            </span>
+
+        </div>
+
+    </section>
+
+    <!-- Active Doses -->
+
+    <details class="card" open>
+
+        <summary>
+
+            Active Doses
+
+        </summary>
+
+        <div id="activeDoses">
+
+            No active doses
+
+        </div>
+
+    </details>
+
+    <!-- Rapid Insulin -->
+
+    <details class="card">
+
+        <summary>
+
+            Rapid Insulin
+
+        </summary>
+
+        <div class="form">
+
+            <select id="rapidType">
+
+                <option selected>NovoRapid</option>
+                <option>Fiasp</option>
+                <option>Humalog</option>
+                <option>Other</option>
+
+            </select>
+
+            <div class="row">
+
+                <input
+                    id="rapidUnits"
+                    type="number"
+                    step="0.1"
+                    placeholder="Units">
+
+                <input
+                    id="rapidBG"
+                    type="number"
+                    step="0.1"
+                    placeholder="BG">
+
+            </div>
+
+            <input
+                id="rapidDuration"
+                type="number"
+                step="0.1"
+                value="5"
+                placeholder="Duration (hours)">
+
+            <input
+                id="rapidNote"
+                type="text"
+                placeholder="Meal / Note">
+
+            <button id="saveRapidBtn">
+
+                Save Rapid
+
+            </button>
+
+        </div>
+
+    </details>
+
+    <!-- Long Acting -->
+
+    <details class="card">
+
+        <summary>
+
+            Long Acting
+
+        </summary>
+
+        <div class="form">
+
+            <select id="longType">
+
+                <option selected>Optisulin</option>
+                <option>Lantus</option>
+                <option>Tresiba</option>
+                <option>Toujeo</option>
+                <option>Other</option>
+
+            </select>
+
+            <input
+                id="longUnits"
+                type="number"
+                step="0.1"
+                placeholder="Units">
+
+            <button id="saveLongBtn">
+
+                Save Long
+
+            </button>
+
+        </div>
+
+    </details>
+
+    <!-- Calendar -->
+
+    <section class="card">
+
+        <h2>Calendar</h2>
+
+        <div id="monthSummary">
+
+        </div>
+
+        <div id="calendar">
+
+        </div>
+
+    </section>
+
+    <!-- Statistics -->
+
+    <button id="openStatsBtn" class="statsOpenButton" type="button">📊 Statistics</button>
+
+</main>
+
+<!-- Statistics Slide-in -->
+
+<aside id="statsPanel" class="statsPanel" aria-hidden="true">
+
+    <div class="statsPanelHeader">
+        <button id="closeStatsBtn" class="statsBackButton" type="button">‹ Back</button>
+        <h2>Statistics</h2>
+        <span></span>
+    </div>
+
+    <div class="statsBody">
+
+        <div class="statsPeriod" role="group" aria-label="Statistics period">
+            <button type="button" data-period="7">7 days</button>
+            <button type="button" data-period="30" class="active">30 days</button>
+            <button type="button" data-period="90">90 days</button>
+        </div>
+
+        <h3>Overview</h3>
+        <div class="statsGrid">
+            <div class="statCard"><span>Average BG</span><strong id="statAvgBG">--</strong></div>
+            <div class="statCard"><span>Highest BG</span><strong id="statHighBG">--</strong></div>
+            <div class="statCard"><span>Lowest BG</span><strong id="statLowBG">--</strong></div>
+            <div class="statCard"><span>BG readings</span><strong id="statBGCount">0</strong></div>
+            <div class="statCard"><span>Rapid / day</span><strong id="statRapidDaily">0 U</strong></div>
+            <div class="statCard"><span>Total rapid</span><strong id="statRapidTotal">0 U</strong></div>
+            <div class="statCard"><span>Long acting / day</span><strong id="statLongDaily">0 U</strong></div>
+        </div>
+
+        <p id="statsDateRange" class="statsDateRange"></p>
+        <p class="statsNote">Statistics are calculated from the entries currently stored in the tracker.</p>
+
+    </div>
+
+</aside>
+
+<!-- Edit Entry Modal -->
+
+<div id="editModal" class="modal hidden">
+
+    <div class="modalContent">
+
+        <h2>Edit Entry</h2>
+
+        <label>Units</label>
+        <input id="editUnits" type="number" step="0.1" inputmode="decimal" placeholder="Units">
+
+        <label>BG</label>
+        <input id="editBG" type="number" step="0.1" inputmode="decimal" placeholder="BG">
+
+        <label>Duration (hours)</label>
+        <input id="editDuration" type="number" step="0.1" inputmode="decimal" placeholder="Duration">
+
+        <label>Note</label>
+        <input id="editNote" type="text" placeholder="Note">
+
+        <button id="saveEditBtn" type="button">SAVE CHANGES</button>
+        <button id="cancelEditBtn" type="button">CANCEL</button>
+
+    </div>
+
+</div>
+
+
+
+<!-- Day Detail Modal -->
+
+<div id="dayModal" class="modal hidden">
+
+    <div class="modalContent">
+
+        <h2 id="dayTitle">
+
+            Day
+
+        </h2>
+
+        <div id="dayEntries">
+
+        </div>
+
+        <button id="closeDayBtn">
+
+            Close
+
+        </button>
+
+    </div>
+
+</div>
+
+<!-- Toast -->
+
+<div id="toast">
+
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/insulin.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/calendar.js"></script>
+<script src="js/statistics.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
