@@ -3,6 +3,19 @@
 // app.js
 // =====================================
 
+let toastTimer = null;
+
+function showToast(message) {
+    const toast = document.getElementById("toast");
+    if (!toast) return;
+    toast.textContent = message;
+    toast.style.display = "block";
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+        toast.style.display = "none";
+    }, 2500);
+}
+
 function refreshApplication() {
     if (typeof refreshUI === "function") refreshUI();
     if (typeof renderCalendar === "function") renderCalendar();

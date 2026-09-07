@@ -236,6 +236,19 @@
 
     <button id="openStatsBtn" class="statsOpenButton" type="button">📊 Statistics</button>
 
+    <!-- Backup -->
+
+    <section class="card">
+
+        <h2>Backup</h2>
+
+        <button id="exportBtn" class="statsOpenButton" type="button">⬇️ Export Backup</button>
+
+        <label for="importFile" class="statsOpenButton" style="display:inline-block;text-align:center;cursor:pointer;">⬆️ Import Backup</label>
+        <input type="file" id="importFile" accept="application/json" style="display:none;">
+
+    </section>
+
 </main>
 
 <!-- Statistics Slide-in -->
@@ -334,6 +347,8 @@
 <div id="toast">
 
 </div>
+
+<div id="toast"></div>
 
 <script src="storage.js"></script>
 <script src="insulin.js"></script>
