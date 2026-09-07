@@ -356,6 +356,13 @@
 <script src="calendar.js"></script>
 <script src="statistics.js"></script>
 <script src="app.js"></script>
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("service-worker.js");
+    });
+}
+</script>
 
 </body>
 </html>
