@@ -219,7 +219,31 @@ function importBackup(file) {
 
             }
 
-            saveEntries(imported);
+            const merge = confirm(
+
+                "Merge with your current data?\n\nOK = Add to existing entries (skips duplicates)\nCancel = Replace all entries"
+
+            );
+
+            let finalEntries;
+
+            if (merge) {
+
+                const existing = loadEntries();
+
+                const existingIds = new Set(existing.map(e => e.id));
+
+                const newOnes = imported.filter(e => !existingIds.has(e.id));
+
+                finalEntries = existing.concat(newOnes);
+
+            } else {
+
+                finalEntries = imported;
+
+            }
+
+            saveEntries(finalEntries);
 
             if (typeof refreshUI === "function") {
 
@@ -227,7 +251,7 @@ function importBackup(file) {
 
             }
 
-            showToast("Backup imported");
+            showToast(merge ? "Backup merged" : "Backup imported");
 
         }
 
